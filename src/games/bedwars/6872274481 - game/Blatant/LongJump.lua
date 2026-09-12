@@ -8,13 +8,12 @@ task.spawn(function()
 end)
 
 local function launchProjectile(item, pos, proj, speed, dir)
-	if not pos or not dir or dir.Magnitude == 0 or not item or not item.tool then return end
+	if not pos or not dir or dir.Magnitude == 0 then return end
 
 	pos = pos - dir * 0.1
 	local shootPosition = (CFrame.lookAlong(pos, Vector3.new(0, -speed, 0)) * CFrame.new(Vector3.new(-bedwars.BowConstantsTable.RelX, -bedwars.BowConstantsTable.RelY, -bedwars.BowConstantsTable.RelZ)))
 	switchItem(item.tool, 0)
 	task.wait(0.1)
-	if not LongJump.Enabled then return end
 	bedwars.ProjectileController:createLocalProjectile(bedwars.ProjectileMeta[proj], proj, proj, shootPosition.Position, '', shootPosition.LookVector * speed, {drawDurationSeconds = 1})
 	if projectileRemote:InvokeServer(item.tool, proj, proj, shootPosition.Position, pos, shootPosition.LookVector * speed, httpService:GenerateGUID(true), {drawDurationSeconds = 1}, workspace:GetServerTimeNow() - 0.045) then
 		local shoot = bedwars.ItemMeta[item.itemType].projectileSource.launchSound
@@ -175,7 +174,6 @@ local LongJumpMethods = {
 for _, v in {'stone_dao', 'iron_dao', 'diamond_dao', 'emerald_dao'} do
 	LongJumpMethods[v] = LongJumpMethods.wood_dao
 end
-
 LongJumpMethods.void_axe = LongJumpMethods.jade_hammer
 LongJumpMethods.siege_tnt = LongJumpMethods.tnt
 LongJumpMethods.pirate_gunpowder_barrel = LongJumpMethods.tnt
@@ -185,7 +183,6 @@ LongJump = vape.Categories.Blatant:CreateModule({
 	Function = function(callback)
 		frictionTable.LongJump = callback or nil
 		updateVelocity()
-
 		if callback then
 			LongJump:Clean(vapeEvents.EntityDamageEvent.Event:Connect(function(damageTable)
 				if not damageTable or not entitylib.isAlive or not entitylib.character or not entitylib.character.RootPart then return end
@@ -279,11 +276,9 @@ LongJump = vape.Categories.Blatant:CreateModule({
 			JumpSpeed = 0
 		end
 	end,
-
 	ExtraText = function()
 		return 'Heatseeker'
 	end,
-
 	Tooltip = 'Lets you jump farther'
 })
 
@@ -300,4 +295,3 @@ Value = LongJump:CreateSlider({
 CameraDir = LongJump:CreateToggle({
 	Name = 'Camera Direction'
 })
-end)
