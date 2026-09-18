@@ -31,6 +31,13 @@ run(function()
 	local NextAttack = 0
 	local AttackIndex = 1
 	local PrimaryTarget
+	local AnimationToken = 0
+
+	local function getWrist()
+		local viewmodel = gameCamera and gameCamera:FindFirstChild('Viewmodel')
+		local rightHand = viewmodel and viewmodel:FindFirstChild('RightHand')
+		return rightHand and rightHand:FindFirstChild('RightWrist')
+	end
 
 	local function getAttackRemote()
 		if AttackRemote then
@@ -150,22 +157,27 @@ run(function()
 
 	local function prioritizePrimary(targets)
 		local currentIndex
+		local firstAttackableIndex
 		for index, target in targets do
-			if target.Entity == PrimaryTarget then
+			if target.CanAttack and not firstAttackableIndex then
+				firstAttackableIndex = index
+			end
+			if target.CanAttack and target.Entity == PrimaryTarget then
 				currentIndex = index
 				break
 			end
 		end
 
-		if currentIndex then
-			local current = table.remove(targets, currentIndex)
-			table.insert(targets, 1, current)
-		elseif targets[1] then
-			PrimaryTarget = targets[1].Entity
-		else
+		local selectedIndex = currentIndex or firstAttackableIndex or (targets[1] and 1)
+		if not selectedIndex then
 			PrimaryTarget = nil
+			return nil
 		end
-		return targets[1]
+
+		local selected = table.remove(targets, selectedIndex)
+		table.insert(targets, 1, selected)
+		PrimaryTarget = selected.Entity
+		return selected
 	end
 
 	local function playSwingEffect(meta, now)
@@ -186,10 +198,11 @@ run(function()
 
 		local origin = root.Position
 		local direction = target.RootPart.Position - origin
-		if direction.Magnitude == 0 then return false end
+		local distance = direction.Magnitude
+		if distance == 0 or distance > AttackRange.Value then return false end
 
 		local unit = direction.Unit
-		local position = origin + unit * math.max(target.Distance - 14.399, 0)
+		local position = origin + unit * math.max(distance - 14.399, 0)
 		local sent = sendAttack({
 			weapon = sword.tool,
 			chargedAttack = {chargeRatio = 0},
@@ -205,7 +218,7 @@ run(function()
 		})
 		if sent then
 			bedwars.SwordController.lastAttack = workspace:GetServerTimeNow()
-			store.attackReach = math.floor(target.Distance * 100) / 100
+			store.attackReach = math.floor(distance * 100) / 100
 			store.attackReachUpdate = tick() + 1
 		end
 		return sent
@@ -235,6 +248,8 @@ run(function()
 	Killaura = vape.Categories.Blatant:CreateModule({
 		Name = 'Killaura',
 		Function = function(callback)
+			AnimationToken += 1
+			local animationToken = AnimationToken
 			if callback then
 				Killaura:Clean(inputService.InputBegan:Connect(function(input)
 					if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
@@ -251,52 +266,49 @@ run(function()
 				if Animation.Enabled then
 					task.spawn(function()
 						local started = false
-						repeat
-							if Attacking then
-								local viewmodel = gameCamera and gameCamera:FindFirstChild('Viewmodel')
-								local rightHand = viewmodel and viewmodel:FindFirstChild('RightHand')
-								local wrist = rightHand and rightHand:FindFirstChild('RightWrist')
-								if not wrist then
-									task.wait()
-									continue
-								end
+						while Killaura.Enabled and Animation.Enabled and animationToken == AnimationToken do
+							local wrist = getWrist()
+							if Attacking and wrist then
 								if not armC0 then
 									armC0 = wrist.C0
 								end
-								local first = not started
-								started = true
 
 								if AnimationMode.Value == 'Random' then
 									anims.Random = {{CFrame = CFrame.Angles(math.rad(math.random(1, 360)), math.rad(math.random(1, 360)), math.rad(math.random(1, 360))), Time = 0.12}}
 								end
 
-								for _, v in anims[AnimationMode.Value] do
-									AnimTween = tweenService:Create(wrist, TweenInfo.new(first and (AnimationTween.Enabled and 0.001 or 0.1) or v.Time / math.max(AnimationSpeed.Value, 0.1), Enum.EasingStyle.Linear), {
-										C0 = armC0 * v.CFrame
-									})
-									AnimTween:Play()
-									AnimTween.Completed:Wait()
-									first = false
-									if (not Killaura.Enabled) or (not Attacking) then break end
+								local sequence = anims[AnimationMode.Value]
+								if type(sequence) == 'table' then
+									local first = not started
+									started = true
+									for _, frame in sequence do
+										if (not Killaura.Enabled) or (not Attacking) or animationToken ~= AnimationToken or not wrist.Parent then break end
+
+										local tween = tweenService:Create(wrist, TweenInfo.new(first and (AnimationTween.Enabled and 0.001 or 0.1) or frame.Time / math.max(AnimationSpeed.Value, 0.1), Enum.EasingStyle.Linear), {
+											C0 = armC0 * frame.CFrame
+										})
+										AnimTween = tween
+										tween:Play()
+										tween.Completed:Wait()
+										first = false
+									end
+								else
+									task.wait(1 / math.max(UpdateRate.Value, 1))
 								end
 							elseif started then
 								started = false
-								local viewmodel = gameCamera and gameCamera:FindFirstChild('Viewmodel')
-								local rightHand = viewmodel and viewmodel:FindFirstChild('RightHand')
-								local wrist = rightHand and rightHand:FindFirstChild('RightWrist')
 								if wrist and armC0 then
-									AnimTween = tweenService:Create(wrist, TweenInfo.new(AnimationTween.Enabled and 0.001 or 0.3, Enum.EasingStyle.Exponential), {
+									local tween = tweenService:Create(wrist, TweenInfo.new(AnimationTween.Enabled and 0.001 or 0.3, Enum.EasingStyle.Exponential), {
 										C0 = armC0
 									})
-									AnimTween:Play()
+									AnimTween = tween
+									tween:Play()
 								end
-								AnimTween:Play()
+								task.wait(1 / math.max(UpdateRate.Value, 1))
+							else
+								task.wait(1 / math.max(UpdateRate.Value, 1))
 							end
-
-							if not started then
-								task.wait(1 / UpdateRate.Value)
-							end
-						until (not Killaura.Enabled) or (not Animation.Enabled)
+						end
 					end)
 				end
 
@@ -322,12 +334,21 @@ run(function()
 						if now >= NextAttack then
 							local targetIndex = ((AttackIndex - 1) % #attackable) + 1
 							local target = attackable[targetIndex]
-							pcall(switchItem, sword.tool, 0)
-
-							local sent = attackTarget(sword, root, target)
-							AttackIndex = (targetIndex % #attackable) + 1
-							local cooldown = math.max(tonumber(meta.sword.attackSpeed) or 0.11, 0.05)
-							NextAttack = now + (sent and cooldown or 0.1)
+							local equipped, switched = pcall(switchItem, sword.tool)
+							if not equipped then
+								NextAttack = tick() + 0.1
+							elseif switched then
+								-- Let the equip remote reach the server before the first hit.
+								NextAttack = tick() + 0.03
+							else
+								local sent = attackTarget(sword, root, target)
+								if sent then
+									AttackIndex = (targetIndex % #attackable) + 1
+									NextAttack = tick() + math.max(tonumber(meta.sword.attackSpeed) or 0.11, 0.05)
+								else
+									NextAttack = tick() + 0.1
+								end
+							end
 						end
 					else
 						AttackIndex = 1
@@ -345,6 +366,11 @@ run(function()
 					task.wait(1 / math.max(UpdateRate.Value, 1))
 				until not Killaura.Enabled
 			else
+				if AnimTween then
+					pcall(function()
+						AnimTween:Cancel()
+					end)
+				end
 				clearCombatState()
 				for _, v in Boxes do
 					v.Adornee = nil
@@ -358,9 +384,7 @@ run(function()
 					end)
 				end
 				if armC0 then
-					local viewmodel = gameCamera and gameCamera:FindFirstChild('Viewmodel')
-					local rightHand = viewmodel and viewmodel:FindFirstChild('RightHand')
-					local wrist = rightHand and rightHand:FindFirstChild('RightWrist')
+					local wrist = getWrist()
 					if wrist then
 						AnimTween = tweenService:Create(wrist, TweenInfo.new(AnimationTween.Enabled and 0.001 or 0.3, Enum.EasingStyle.Exponential), {
 							C0 = armC0
