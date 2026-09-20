@@ -20,61 +20,97 @@ if not screenGui.Parent then
 	screenGui.Parent = Players.LocalPlayer:WaitForChild('PlayerGui')
 end
 
-local bg = Instance.new('Frame')
-bg.Size = UDim2.new(1, 0, 1, 0)
-bg.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
-bg.BorderSizePixel = 0
-bg.ZIndex = 10
-bg.Parent = screenGui
+local container = Instance.new('Frame')
+container.Size = UDim2.fromOffset(320, 110)
+container.Position = UDim2.new(1, -340, 1, -130)
+container.BackgroundColor3 = Color3.fromRGB(8, 8, 12)
+container.BorderSizePixel = 0
+container.ZIndex = 10
+container.Parent = screenGui
+
+Instance.new('UICorner', container).CornerRadius = UDim.new(0, 6)
+
+local border = Instance.new('UIStroke')
+border.Color = Color3.fromRGB(0, 100, 255)
+border.Thickness = 1
+border.Parent = container
 
 local title = Instance.new('TextLabel')
-title.Size = UDim2.fromOffset(600, 80)
-title.Position = UDim2.new(0.5, -300, 0.5, -80)
+title.Size = UDim2.new(1, -20, 0, 28)
+title.Position = UDim2.fromOffset(12, 10)
 title.BackgroundTransparency = 1
-title.Text = 'BlackShark'
-title.TextColor3 = Color3.fromRGB(255, 255, 255)
+title.Text = 'BLACKSHARK'
+title.TextColor3 = Color3.fromRGB(0, 140, 255)
 title.Font = Enum.Font.GothamBold
-title.TextSize = 60
+title.TextSize = 16
+title.TextXAlignment = Enum.TextXAlignment.Left
 title.ZIndex = 11
-title.Parent = bg
+title.Parent = container
+
+local divider = Instance.new('Frame')
+divider.Size = UDim2.new(1, -24, 0, 1)
+divider.Position = UDim2.fromOffset(12, 38)
+divider.BackgroundColor3 = Color3.fromRGB(0, 60, 140)
+divider.BorderSizePixel = 0
+divider.ZIndex = 11
+divider.Parent = container
+
+local statusText = Instance.new('TextLabel')
+statusText.Size = UDim2.new(1, -20, 0, 20)
+statusText.Position = UDim2.fromOffset(12, 46)
+statusText.BackgroundTransparency = 1
+statusText.Text = '> Initializing...'
+statusText.TextColor3 = Color3.fromRGB(80, 120, 200)
+statusText.Font = Enum.Font.Code
+statusText.TextSize = 13
+statusText.TextXAlignment = Enum.TextXAlignment.Left
+statusText.ZIndex = 11
+statusText.Parent = container
 
 local barBg = Instance.new('Frame')
-barBg.Size = UDim2.fromOffset(400, 6)
-barBg.Position = UDim2.new(0.5, -200, 0.5, 20)
-barBg.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+barBg.Size = UDim2.new(1, -24, 0, 4)
+barBg.Position = UDim2.fromOffset(12, 76)
+barBg.BackgroundColor3 = Color3.fromRGB(20, 20, 35)
 barBg.BorderSizePixel = 0
 barBg.ZIndex = 11
-barBg.Parent = bg
+barBg.Parent = container
 Instance.new('UICorner', barBg).CornerRadius = UDim.new(1, 0)
 
 local barFill = Instance.new('Frame')
 barFill.Size = UDim2.new(0, 0, 1, 0)
-barFill.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+barFill.BackgroundColor3 = Color3.fromRGB(0, 120, 255)
 barFill.BorderSizePixel = 0
 barFill.ZIndex = 12
 barFill.Parent = barBg
 Instance.new('UICorner', barFill).CornerRadius = UDim.new(1, 0)
 
-local statusText = Instance.new('TextLabel')
-statusText.Size = UDim2.fromOffset(400, 30)
-statusText.Position = UDim2.new(0.5, -200, 0.5, 36)
-statusText.BackgroundTransparency = 1
-statusText.Text = 'Initializing...'
-statusText.TextColor3 = Color3.fromRGB(150, 150, 150)
-statusText.Font = Enum.Font.Gotham
-statusText.TextSize = 14
-statusText.TextXAlignment = Enum.TextXAlignment.Left
-statusText.ZIndex = 11
-statusText.Parent = bg
+local pctLabel = Instance.new('TextLabel')
+pctLabel.Size = UDim2.new(1, -24, 0, 18)
+pctLabel.Position = UDim2.fromOffset(12, 86)
+pctLabel.BackgroundTransparency = 1
+pctLabel.Text = '0%'
+pctLabel.TextColor3 = Color3.fromRGB(40, 80, 160)
+pctLabel.Font = Enum.Font.Code
+pctLabel.TextSize = 11
+pctLabel.TextXAlignment = Enum.TextXAlignment.Right
+pctLabel.ZIndex = 11
+pctLabel.Parent = container
 
 local function setProgress(pct, status)
-	barFill.Size = UDim2.new(pct, 0, 1, 0)
-	if status then statusText.Text = status end
+	TweenService:Create(barFill, TweenInfo.new(0.5, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
+		Size = UDim2.new(pct, 0, 1, 0)
+	}):Play()
+	pctLabel.Text = math.floor(pct * 100)..'%'
+	if status then statusText.Text = '> '..status end
 end
 
 local function closeLoader()
-	setProgress(1, 'Done!')
-	task.wait(0.3)
+	setProgress(1, 'Ready')
+	task.wait(0.8)
+	TweenService:Create(container, TweenInfo.new(0.4, Enum.EasingStyle.Quad, Enum.EasingDirection.In), {
+		Position = UDim2.new(1, 20, 1, -130)
+	}):Play()
+	task.wait(0.5)
 	screenGui:Destroy()
 end
 
@@ -110,20 +146,25 @@ for _, folder in {'newvape', 'newvape/games', 'newvape/profiles', 'newvape/asset
 	end
 end
 
-setProgress(0.05, 'Checking for updates...')
+setProgress(0.05, 'Initializing...')
+task.wait(1.5)
 
 if not shared.VapeDeveloper then
 	local assetVer = '1'
+	setProgress(0.15, 'Checking for updates...')
+	task.wait(1)
 	local success, response = pcall(function()
 		return game:HttpGet('https://api.github.com/repos/Mont015/BlackSharkCompiled/commits/main', true)
 	end)
 	local commit = success and response:match('"sha"%s*:%s*"([0-9a-f]+)"') or nil
 	commit = commit and #commit == 40 and commit or 'main'
 
-	setProgress(0.2, 'Checking cache...')
+	setProgress(0.3, 'Verifying cache...')
+	task.wait(1)
 
 	if commit == 'main' or (isfile('newvape/profiles/commit.txt') and readfile('newvape/profiles/commit.txt') or '') ~= commit then
-		setProgress(0.3, 'Wiping old cache...')
+		setProgress(0.4, 'Clearing old files...')
+		task.wait(0.8)
 		wipeFolder('newvape')
 		wipeFolder('newvape/games')
 		wipeFolder('newvape/guis')
@@ -138,12 +179,13 @@ if not shared.VapeDeveloper then
 	writefile('newvape/profiles/commit.txt', commit)
 end
 
-setProgress(0.5, 'Downloading...')
+setProgress(0.55, 'Downloading core...')
+task.wait(1.5)
 local mainFile = downloadFile('newvape/main.lua')
-setProgress(0.8, 'Loading...')
-task.wait(0.1)
-setProgress(0.95, 'Starting...')
-task.wait(0.1)
+setProgress(0.75, 'Loading modules...')
+task.wait(1.5)
+setProgress(0.9, 'Starting BlackShark...')
+task.wait(1.2)
 
 closeLoader()
 
