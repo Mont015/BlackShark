@@ -9,121 +9,136 @@ end
 
 local Players = game:GetService('Players')
 local TweenService = game:GetService('TweenService')
+local lplr = Players.LocalPlayer
 
 local screenGui = Instance.new('ScreenGui')
 screenGui.Name = 'BlackSharkLoader'
 screenGui.ResetOnSpawn = false
 screenGui.DisplayOrder = 999
 screenGui.IgnoreGuiInset = true
-pcall(function() screenGui.Parent = game:GetService('CoreGui') end)
-if not screenGui.Parent then
-	screenGui.Parent = Players.LocalPlayer:WaitForChild('PlayerGui')
-end
+screenGui.Parent = (gethui and gethui()) or lplr:WaitForChild('PlayerGui')
 
-local container = Instance.new('Frame')
-container.Size = UDim2.fromOffset(320, 110)
-container.Position = UDim2.new(0.5, -160, 0.5, -55)
-container.BackgroundColor3 = Color3.fromRGB(8, 8, 12)
-container.BorderSizePixel = 0
-container.ZIndex = 10
-container.Parent = screenGui
-Instance.new('UICorner', container).CornerRadius = UDim.new(0, 6)
+local bg = Instance.new('Frame')
+bg.Size = UDim2.new(1, 0, 1, 0)
+bg.BackgroundColor3 = Color3.fromRGB(9, 9, 12)
+bg.BorderSizePixel = 0
+bg.ZIndex = 10
+bg.Parent = screenGui
 
-local border = Instance.new('UIStroke')
-border.Color = Color3.fromRGB(0, 100, 255)
-border.Thickness = 1
-border.Parent = container
+local card = Instance.new('Frame')
+card.Size = UDim2.fromOffset(420, 180)
+card.Position = UDim2.new(0.5, -210, 0.5, -90)
+card.BackgroundColor3 = Color3.fromRGB(14, 14, 18)
+card.BorderSizePixel = 0
+card.ZIndex = 11
+card.Parent = bg
+Instance.new('UICorner', card).CornerRadius = UDim.new(0, 12)
 
-local title = Instance.new('TextLabel')
-title.Size = UDim2.new(1, -20, 0, 28)
-title.Position = UDim2.fromOffset(12, 10)
-title.BackgroundTransparency = 1
-title.Text = 'BLACKSHARK'
-title.TextColor3 = Color3.fromRGB(0, 140, 255)
-title.Font = Enum.Font.GothamBold
-title.TextSize = 16
-title.TextXAlignment = Enum.TextXAlignment.Left
-title.ZIndex = 11
-title.Parent = container
+local cardStroke = Instance.new('UIStroke')
+cardStroke.Color = Color3.fromRGB(40, 40, 50)
+cardStroke.Thickness = 1
+cardStroke.Parent = card
 
-local divider = Instance.new('Frame')
-divider.Size = UDim2.new(1, -24, 0, 1)
-divider.Position = UDim2.fromOffset(12, 38)
-divider.BackgroundColor3 = Color3.fromRGB(0, 60, 140)
-divider.BorderSizePixel = 0
-divider.ZIndex = 11
-divider.Parent = container
+local accentLine = Instance.new('Frame')
+accentLine.Size = UDim2.fromOffset(420, 2)
+accentLine.Position = UDim2.fromOffset(0, 0)
+accentLine.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+accentLine.BorderSizePixel = 0
+accentLine.ZIndex = 12
+accentLine.Parent = card
+Instance.new('UICorner', accentLine).CornerRadius = UDim.new(0, 2)
 
-local statusText = Instance.new('TextLabel')
-statusText.Size = UDim2.new(1, -20, 0, 20)
-statusText.Position = UDim2.fromOffset(12, 46)
-statusText.BackgroundTransparency = 1
-statusText.Text = '> Initializing...'
-statusText.TextColor3 = Color3.fromRGB(80, 120, 200)
-statusText.Font = Enum.Font.Code
-statusText.TextSize = 13
-statusText.TextXAlignment = Enum.TextXAlignment.Left
-statusText.ZIndex = 11
-statusText.Parent = container
+local titleLabel = Instance.new('TextLabel')
+titleLabel.Size = UDim2.fromOffset(380, 40)
+titleLabel.Position = UDim2.fromOffset(20, 22)
+titleLabel.BackgroundTransparency = 1
+titleLabel.Text = 'BlackShark'
+titleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+titleLabel.Font = Enum.Font.GothamBold
+titleLabel.TextSize = 28
+titleLabel.TextXAlignment = Enum.TextXAlignment.Left
+titleLabel.ZIndex = 12
+titleLabel.Parent = card
+
+local versionLabel = Instance.new('TextLabel')
+versionLabel.Size = UDim2.fromOffset(380, 20)
+versionLabel.Position = UDim2.fromOffset(20, 58)
+versionLabel.BackgroundTransparency = 1
+versionLabel.Text = 'v1.0'
+versionLabel.TextColor3 = Color3.fromRGB(60, 60, 70)
+versionLabel.Font = Enum.Font.Gotham
+versionLabel.TextSize = 12
+versionLabel.TextXAlignment = Enum.TextXAlignment.Left
+versionLabel.ZIndex = 12
+versionLabel.Parent = card
+
+local statusLabel = Instance.new('TextLabel')
+statusLabel.Size = UDim2.fromOffset(280, 20)
+statusLabel.Position = UDim2.fromOffset(20, 108)
+statusLabel.BackgroundTransparency = 1
+statusLabel.Text = 'Initializing...'
+statusLabel.TextColor3 = Color3.fromRGB(120, 120, 140)
+statusLabel.Font = Enum.Font.Gotham
+statusLabel.TextSize = 12
+statusLabel.TextXAlignment = Enum.TextXAlignment.Left
+statusLabel.ZIndex = 12
+statusLabel.Parent = card
+
+local pctLabel = Instance.new('TextLabel')
+pctLabel.Size = UDim2.fromOffset(80, 20)
+pctLabel.Position = UDim2.fromOffset(320, 108)
+pctLabel.BackgroundTransparency = 1
+pctLabel.Text = '0%'
+pctLabel.TextColor3 = Color3.fromRGB(80, 80, 100)
+pctLabel.Font = Enum.Font.GothamBold
+pctLabel.TextSize = 12
+pctLabel.TextXAlignment = Enum.TextXAlignment.Right
+pctLabel.ZIndex = 12
+pctLabel.Parent = card
 
 local barBg = Instance.new('Frame')
-barBg.Size = UDim2.new(1, -24, 0, 4)
-barBg.Position = UDim2.fromOffset(12, 76)
-barBg.BackgroundColor3 = Color3.fromRGB(20, 20, 35)
+barBg.Size = UDim2.fromOffset(380, 3)
+barBg.Position = UDim2.fromOffset(20, 138)
+barBg.BackgroundColor3 = Color3.fromRGB(28, 28, 35)
 barBg.BorderSizePixel = 0
-barBg.ZIndex = 11
-barBg.Parent = container
+barBg.ZIndex = 12
+barBg.Parent = card
 Instance.new('UICorner', barBg).CornerRadius = UDim.new(1, 0)
 
 local barFill = Instance.new('Frame')
 barFill.Size = UDim2.new(0, 0, 1, 0)
-barFill.BackgroundColor3 = Color3.fromRGB(0, 120, 255)
+barFill.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 barFill.BorderSizePixel = 0
-barFill.ZIndex = 12
+barFill.ZIndex = 13
 barFill.Parent = barBg
 Instance.new('UICorner', barFill).CornerRadius = UDim.new(1, 0)
 
-local pctLabel = Instance.new('TextLabel')
-pctLabel.Size = UDim2.new(1, -24, 0, 18)
-pctLabel.Position = UDim2.fromOffset(12, 86)
-pctLabel.BackgroundTransparency = 1
-pctLabel.Text = '0%'
-pctLabel.TextColor3 = Color3.fromRGB(40, 80, 160)
-pctLabel.Font = Enum.Font.Code
-pctLabel.TextSize = 11
-pctLabel.TextXAlignment = Enum.TextXAlignment.Right
-pctLabel.ZIndex = 11
-pctLabel.Parent = container
-
-local updateBtn = Instance.new('TextButton')
-updateBtn.Size = UDim2.new(1, -24, 0, 28)
-updateBtn.Position = UDim2.fromOffset(12, 46)
-updateBtn.BackgroundColor3 = Color3.fromRGB(0, 80, 200)
-updateBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
-updateBtn.Font = Enum.Font.GothamBold
-updateBtn.TextSize = 13
-updateBtn.Text = 'New update found — click to update'
-updateBtn.BorderSizePixel = 0
-updateBtn.ZIndex = 12
-updateBtn.Visible = false
-updateBtn.Parent = container
-Instance.new('UICorner', updateBtn).CornerRadius = UDim.new(0, 4)
-
 local function setProgress(pct, status)
-	TweenService:Create(barFill, TweenInfo.new(0.5, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
+	TweenService:Create(barFill, TweenInfo.new(0.4, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
 		Size = UDim2.new(pct, 0, 1, 0)
 	}):Play()
 	pctLabel.Text = math.floor(pct * 100)..'%'
-	if status then statusText.Text = '> '..status end
+	if status then statusLabel.Text = status end
 end
 
 local function closeLoader()
 	setProgress(1, 'Ready')
-	task.wait(0.8)
-	TweenService:Create(container, TweenInfo.new(0.4, Enum.EasingStyle.Quad, Enum.EasingDirection.In), {
-		Position = UDim2.new(0.5, -160, 1, 20)
+	task.wait(0.4)
+	TweenService:Create(bg, TweenInfo.new(0.5, Enum.EasingStyle.Quad, Enum.EasingDirection.In), {
+		BackgroundTransparency = 1
 	}):Play()
-	task.wait(0.5)
+	TweenService:Create(card, TweenInfo.new(0.5, Enum.EasingStyle.Quad, Enum.EasingDirection.In), {
+		BackgroundTransparency = 1
+	}):Play()
+	for _, v in card:GetDescendants() do
+		if v:IsA('TextLabel') or v:IsA('Frame') or v:IsA('UIStroke') then
+			TweenService:Create(v, TweenInfo.new(0.5), {
+				BackgroundTransparency = 1,
+				TextTransparency = 1
+			}):Play()
+		end
+	end
+	task.wait(0.6)
 	screenGui:Destroy()
 end
 
@@ -160,40 +175,31 @@ for _, folder in {'newvape', 'newvape/games', 'newvape/profiles', 'newvape/asset
 end
 
 setProgress(0.05, 'Initializing...')
-task.wait(1.5)
+task.wait(1)
 
 if not shared.VapeDeveloper then
 	local assetVer = '1'
 	setProgress(0.15, 'Checking for updates...')
-	task.wait(1)
+	task.wait(0.8)
+
 	local success, response = pcall(function()
 		return game:HttpGet('https://api.github.com/repos/Mont015/BlackSharkCompiled/commits/main', true)
 	end)
 	local commit = success and response:match('"sha"%s*:%s*"([0-9a-f]+)"') or nil
 	commit = commit and #commit == 40 and commit or 'main'
 
-	setProgress(0.3, 'Verifying cache...')
-	task.wait(1)
+	setProgress(0.28, 'Verifying cache...')
+	task.wait(0.8)
 
 	local hasUpdate = commit ~= 'main' and (isfile('newvape/profiles/commit.txt') and readfile('newvape/profiles/commit.txt') or '') ~= commit
 
 	if hasUpdate then
-		statusText.Visible = false
-		updateBtn.Visible = true
-		local clicked = false
-		updateBtn.MouseButton1Click:Connect(function()
-			if clicked then return end
-			clicked = true
-			updateBtn.Visible = false
-			statusText.Visible = true
-			setProgress(0.4, 'Updating files...')
-			task.wait(0.8)
-			wipeFolder('newvape/games')
-			wipeFolder('newvape/guis')
-			wipeFolder('newvape/libraries')
-			writefile('newvape/profiles/commit.txt', commit)
-		end)
-		repeat task.wait() until not updateBtn.Visible
+		setProgress(0.38, 'Clearing outdated files...')
+		task.wait(0.6)
+		wipeFolder('newvape/games')
+		wipeFolder('newvape/guis')
+		wipeFolder('newvape/libraries')
+		writefile('newvape/profiles/commit.txt', commit)
 	end
 
 	if (isfile('newvape/profiles/asset.txt') and readfile('newvape/profiles/asset.txt') or '') ~= assetVer then
@@ -204,13 +210,13 @@ if not shared.VapeDeveloper then
 	writefile('newvape/profiles/commit.txt', commit)
 end
 
-setProgress(0.55, 'Downloading core...')
-task.wait(1.5)
+setProgress(0.5, 'Downloading core...')
+task.wait(1.2)
 local mainFile = downloadFile('newvape/main.lua')
 setProgress(0.75, 'Loading modules...')
-task.wait(1.5)
+task.wait(1)
 setProgress(0.9, 'Starting BlackShark...')
-task.wait(1.2)
+task.wait(0.8)
 
 closeLoader()
 
