@@ -22,12 +22,11 @@ end
 
 local container = Instance.new('Frame')
 container.Size = UDim2.fromOffset(320, 110)
-container.Position = UDim2.new(1, -340, 1, -130)
+container.Position = UDim2.new(0.5, -160, 0.5, -55)
 container.BackgroundColor3 = Color3.fromRGB(8, 8, 12)
 container.BorderSizePixel = 0
 container.ZIndex = 10
 container.Parent = screenGui
-
 Instance.new('UICorner', container).CornerRadius = UDim.new(0, 6)
 
 local border = Instance.new('UIStroke')
@@ -96,6 +95,20 @@ pctLabel.TextXAlignment = Enum.TextXAlignment.Right
 pctLabel.ZIndex = 11
 pctLabel.Parent = container
 
+local updateBtn = Instance.new('TextButton')
+updateBtn.Size = UDim2.new(1, -24, 0, 28)
+updateBtn.Position = UDim2.fromOffset(12, 46)
+updateBtn.BackgroundColor3 = Color3.fromRGB(0, 80, 200)
+updateBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+updateBtn.Font = Enum.Font.GothamBold
+updateBtn.TextSize = 13
+updateBtn.Text = 'New update found — click to update'
+updateBtn.BorderSizePixel = 0
+updateBtn.ZIndex = 12
+updateBtn.Visible = false
+updateBtn.Parent = container
+Instance.new('UICorner', updateBtn).CornerRadius = UDim.new(0, 4)
+
 local function setProgress(pct, status)
 	TweenService:Create(barFill, TweenInfo.new(0.5, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
 		Size = UDim2.new(pct, 0, 1, 0)
@@ -108,7 +121,7 @@ local function closeLoader()
 	setProgress(1, 'Ready')
 	task.wait(0.8)
 	TweenService:Create(container, TweenInfo.new(0.4, Enum.EasingStyle.Quad, Enum.EasingDirection.In), {
-		Position = UDim2.new(1, 20, 1, -130)
+		Position = UDim2.new(0.5, -160, 1, 20)
 	}):Play()
 	task.wait(0.5)
 	screenGui:Destroy()
@@ -162,13 +175,25 @@ if not shared.VapeDeveloper then
 	setProgress(0.3, 'Verifying cache...')
 	task.wait(1)
 
-	if commit == 'main' or (isfile('newvape/profiles/commit.txt') and readfile('newvape/profiles/commit.txt') or '') ~= commit then
-		setProgress(0.4, 'Clearing old files...')
-		task.wait(0.8)
-		wipeFolder('newvape')
-		wipeFolder('newvape/games')
-		wipeFolder('newvape/guis')
-		wipeFolder('newvape/libraries')
+	local hasUpdate = commit ~= 'main' and (isfile('newvape/profiles/commit.txt') and readfile('newvape/profiles/commit.txt') or '') ~= commit
+
+	if hasUpdate then
+		statusText.Visible = false
+		updateBtn.Visible = true
+		local clicked = false
+		updateBtn.MouseButton1Click:Connect(function()
+			if clicked then return end
+			clicked = true
+			updateBtn.Visible = false
+			statusText.Visible = true
+			setProgress(0.4, 'Updating files...')
+			task.wait(0.8)
+			wipeFolder('newvape/games')
+			wipeFolder('newvape/guis')
+			wipeFolder('newvape/libraries')
+			writefile('newvape/profiles/commit.txt', commit)
+		end)
+		repeat task.wait() until not updateBtn.Visible
 	end
 
 	if (isfile('newvape/profiles/asset.txt') and readfile('newvape/profiles/asset.txt') or '') ~= assetVer then
