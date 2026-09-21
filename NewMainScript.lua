@@ -18,21 +18,13 @@ screenGui.DisplayOrder = 9999
 screenGui.IgnoreGuiInset = true
 screenGui.Parent = lplr:WaitForChild('PlayerGui')
 
-local bg = Instance.new('Frame')
-bg.Size = UDim2.new(1, 0, 1, 0)
-bg.Position = UDim2.new(0, 0, 0, 0)
-bg.BackgroundColor3 = Color3.fromRGB(9, 9, 12)
-bg.BorderSizePixel = 0
-bg.ZIndex = 10
-bg.Parent = screenGui
-
 local card = Instance.new('Frame')
 card.Size = UDim2.fromOffset(420, 180)
 card.Position = UDim2.new(0.5, -210, 0.5, -90)
 card.BackgroundColor3 = Color3.fromRGB(14, 14, 18)
 card.BorderSizePixel = 0
 card.ZIndex = 11
-card.Parent = bg
+card.Parent = screenGui
 Instance.new('UICorner', card).CornerRadius = UDim.new(0, 12)
 
 local cardStroke = Instance.new('UIStroke')
@@ -125,9 +117,6 @@ end
 local function closeLoader()
 	setProgress(1, 'Ready')
 	task.wait(0.5)
-	TweenService:Create(bg, TweenInfo.new(0.6, Enum.EasingStyle.Quad, Enum.EasingDirection.In), {
-		BackgroundTransparency = 1
-	}):Play()
 	for _, v in card:GetDescendants() do
 		if v:IsA('TextLabel') then
 			TweenService:Create(v, TweenInfo.new(0.5), {TextTransparency = 1}):Play()
