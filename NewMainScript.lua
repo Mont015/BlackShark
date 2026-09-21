@@ -14,12 +14,13 @@ local lplr = Players.LocalPlayer
 local screenGui = Instance.new('ScreenGui')
 screenGui.Name = 'BlackSharkLoader'
 screenGui.ResetOnSpawn = false
-screenGui.DisplayOrder = 999
+screenGui.DisplayOrder = 9999
 screenGui.IgnoreGuiInset = true
-screenGui.Parent = (gethui and gethui()) or lplr:WaitForChild('PlayerGui')
+screenGui.Parent = lplr:WaitForChild('PlayerGui')
 
 local bg = Instance.new('Frame')
 bg.Size = UDim2.new(1, 0, 1, 0)
+bg.Position = UDim2.new(0, 0, 0, 0)
 bg.BackgroundColor3 = Color3.fromRGB(9, 9, 12)
 bg.BorderSizePixel = 0
 bg.ZIndex = 10
@@ -123,22 +124,19 @@ end
 
 local function closeLoader()
 	setProgress(1, 'Ready')
-	task.wait(0.4)
-	TweenService:Create(bg, TweenInfo.new(0.5, Enum.EasingStyle.Quad, Enum.EasingDirection.In), {
-		BackgroundTransparency = 1
-	}):Play()
-	TweenService:Create(card, TweenInfo.new(0.5, Enum.EasingStyle.Quad, Enum.EasingDirection.In), {
+	task.wait(0.5)
+	TweenService:Create(bg, TweenInfo.new(0.6, Enum.EasingStyle.Quad, Enum.EasingDirection.In), {
 		BackgroundTransparency = 1
 	}):Play()
 	for _, v in card:GetDescendants() do
-		if v:IsA('TextLabel') or v:IsA('Frame') or v:IsA('UIStroke') then
-			TweenService:Create(v, TweenInfo.new(0.5), {
-				BackgroundTransparency = 1,
-				TextTransparency = 1
-			}):Play()
+		if v:IsA('TextLabel') then
+			TweenService:Create(v, TweenInfo.new(0.5), {TextTransparency = 1}):Play()
+		elseif v:IsA('Frame') then
+			TweenService:Create(v, TweenInfo.new(0.5), {BackgroundTransparency = 1}):Play()
 		end
 	end
-	task.wait(0.6)
+	TweenService:Create(card, TweenInfo.new(0.5), {BackgroundTransparency = 1}):Play()
+	task.wait(0.7)
 	screenGui:Destroy()
 end
 
