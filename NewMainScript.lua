@@ -19,80 +19,47 @@ screenGui.IgnoreGuiInset = true
 screenGui.Parent = lplr:WaitForChild('PlayerGui')
 
 local card = Instance.new('Frame')
-card.Size = UDim2.fromOffset(420, 180)
-card.Position = UDim2.new(0.5, -210, 0.5, -90)
-card.BackgroundColor3 = Color3.fromRGB(14, 14, 18)
+card.Size = UDim2.fromOffset(420, 210)
+card.Position = UDim2.new(0.5, -210, 0.5, -105)
+card.BackgroundColor3 = Color3.fromRGB(18, 18, 22)
 card.BorderSizePixel = 0
 card.ZIndex = 11
 card.Parent = screenGui
-Instance.new('UICorner', card).CornerRadius = UDim.new(0, 12)
+Instance.new('UICorner', card).CornerRadius = UDim.new(0, 8)
 
-local cardStroke = Instance.new('UIStroke')
-cardStroke.Color = Color3.fromRGB(40, 40, 50)
-cardStroke.Thickness = 1
-cardStroke.Parent = card
+local border = Instance.new('UIStroke')
+border.Color = Color3.fromRGB(0, 200, 160)
+border.Thickness = 1.5
+border.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+border.Parent = card
 
-local accentLine = Instance.new('Frame')
-accentLine.Size = UDim2.fromOffset(420, 2)
-accentLine.Position = UDim2.fromOffset(0, 0)
-accentLine.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-accentLine.BorderSizePixel = 0
-accentLine.ZIndex = 12
-accentLine.Parent = card
-Instance.new('UICorner', accentLine).CornerRadius = UDim.new(0, 2)
+local logo = Instance.new('TextLabel')
+logo.Size = UDim2.fromOffset(380, 50)
+logo.Position = UDim2.fromOffset(20, 30)
+logo.BackgroundTransparency = 1
+logo.Text = 'BlackShark'
+logo.TextColor3 = Color3.fromRGB(255, 255, 255)
+logo.Font = Enum.Font.GothamBold
+logo.TextSize = 32
+logo.ZIndex = 12
+logo.Parent = card
 
-local titleLabel = Instance.new('TextLabel')
-titleLabel.Size = UDim2.fromOffset(380, 40)
-titleLabel.Position = UDim2.fromOffset(20, 22)
-titleLabel.BackgroundTransparency = 1
-titleLabel.Text = 'BlackShark'
-titleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
-titleLabel.Font = Enum.Font.GothamBold
-titleLabel.TextSize = 28
-titleLabel.TextXAlignment = Enum.TextXAlignment.Left
-titleLabel.ZIndex = 12
-titleLabel.Parent = card
-
-local versionLabel = Instance.new('TextLabel')
-versionLabel.Size = UDim2.fromOffset(380, 20)
-versionLabel.Position = UDim2.fromOffset(20, 58)
-versionLabel.BackgroundTransparency = 1
-versionLabel.Text = 'v1.0'
-versionLabel.TextColor3 = Color3.fromRGB(60, 60, 70)
-versionLabel.Font = Enum.Font.Gotham
-versionLabel.TextSize = 12
-versionLabel.TextXAlignment = Enum.TextXAlignment.Left
-versionLabel.ZIndex = 12
-versionLabel.Parent = card
-
-local statusLabel = Instance.new('TextLabel')
-statusLabel.Size = UDim2.fromOffset(280, 20)
-statusLabel.Position = UDim2.fromOffset(20, 108)
-statusLabel.BackgroundTransparency = 1
-statusLabel.Text = 'Initializing...'
-statusLabel.TextColor3 = Color3.fromRGB(120, 120, 140)
-statusLabel.Font = Enum.Font.Gotham
-statusLabel.TextSize = 12
-statusLabel.TextXAlignment = Enum.TextXAlignment.Left
-statusLabel.ZIndex = 12
-statusLabel.Parent = card
-
-local pctLabel = Instance.new('TextLabel')
-pctLabel.Size = UDim2.fromOffset(80, 20)
-pctLabel.Position = UDim2.fromOffset(320, 108)
-pctLabel.BackgroundTransparency = 1
-pctLabel.Text = '0%'
-pctLabel.TextColor3 = Color3.fromRGB(80, 80, 100)
-pctLabel.Font = Enum.Font.GothamBold
-pctLabel.TextSize = 12
-pctLabel.TextXAlignment = Enum.TextXAlignment.Right
-pctLabel.ZIndex = 12
-pctLabel.Parent = card
+local loadingText = Instance.new('TextLabel')
+loadingText.Size = UDim2.fromOffset(380, 24)
+loadingText.Position = UDim2.fromOffset(20, 88)
+loadingText.BackgroundTransparency = 1
+loadingText.Text = 'L O A D I N G . . .'
+loadingText.TextColor3 = Color3.fromRGB(200, 200, 200)
+loadingText.Font = Enum.Font.GothamBold
+loadingText.TextSize = 13
+loadingText.LetterSpacing = 2
+loadingText.ZIndex = 12
+loadingText.Parent = card
 
 local barBg = Instance.new('Frame')
-barBg.Size = UDim2.fromOffset(380, 3)
-barBg.Position = UDim2.fromOffset(20, 138)
-barBg.BackgroundColor3 = Color3.fromRGB(28, 28, 35)
+barBg.Size = UDim2.fromOffset(380, 6)
+barBg.Position = UDim2.fromOffset(20, 118)
+barBg.BackgroundColor3 = Color3.fromRGB(40, 40, 50)
 barBg.BorderSizePixel = 0
 barBg.ZIndex = 12
 barBg.Parent = card
@@ -100,32 +67,81 @@ Instance.new('UICorner', barBg).CornerRadius = UDim.new(1, 0)
 
 local barFill = Instance.new('Frame')
 barFill.Size = UDim2.new(0, 0, 1, 0)
-barFill.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+barFill.BackgroundColor3 = Color3.fromRGB(0, 200, 160)
 barFill.BorderSizePixel = 0
 barFill.ZIndex = 13
 barFill.Parent = barBg
 Instance.new('UICorner', barFill).CornerRadius = UDim.new(1, 0)
 
+local statusLabel = Instance.new('TextLabel')
+statusLabel.Size = UDim2.fromOffset(380, 20)
+statusLabel.Position = UDim2.fromOffset(20, 132)
+statusLabel.BackgroundTransparency = 1
+statusLabel.Text = 'Initializing your experience...'
+statusLabel.TextColor3 = Color3.fromRGB(120, 120, 140)
+statusLabel.Font = Enum.Font.Gotham
+statusLabel.TextSize = 12
+statusLabel.ZIndex = 12
+statusLabel.Parent = card
+
+local dotsFrame = Instance.new('Frame')
+dotsFrame.Size = UDim2.fromOffset(380, 20)
+dotsFrame.Position = UDim2.fromOffset(20, 162)
+dotsFrame.BackgroundTransparency = 1
+dotsFrame.ZIndex = 12
+dotsFrame.Parent = card
+
+local dots = {}
+for i = 1, 4 do
+	local dot = Instance.new('Frame')
+	dot.Size = UDim2.fromOffset(10, 10)
+	dot.Position = UDim2.fromOffset((i - 1) * 18, 5)
+	dot.BackgroundColor3 = Color3.fromRGB(50, 50, 60)
+	dot.BorderSizePixel = 0
+	dot.ZIndex = 13
+	dot.Parent = dotsFrame
+	Instance.new('UICorner', dot).CornerRadius = UDim.new(1, 0)
+	dots[i] = dot
+end
+
+local activeDot = 1
+local dotConn = game:GetService('RunService').Heartbeat:Connect(function()
+	local t = tick() % 0.5
+	if t < 0.1 then
+		local newDot = math.floor(tick() / 0.5) % 4 + 1
+		if newDot ~= activeDot then
+			dots[activeDot].BackgroundColor3 = Color3.fromRGB(50, 50, 60)
+			activeDot = newDot
+			dots[activeDot].BackgroundColor3 = Color3.fromRGB(0, 200, 160)
+		end
+	end
+end)
+
 local function setProgress(pct, status)
 	TweenService:Create(barFill, TweenInfo.new(0.4, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
 		Size = UDim2.new(pct, 0, 1, 0)
 	}):Play()
-	pctLabel.Text = math.floor(pct * 100)..'%'
 	if status then statusLabel.Text = status end
 end
 
 local function closeLoader()
-	setProgress(1, 'Ready')
+	setProgress(1, 'Ready!')
 	task.wait(0.5)
+	dotConn:Disconnect()
+	TweenService:Create(card, TweenInfo.new(0.5, Enum.EasingStyle.Quad, Enum.EasingDirection.In), {
+		Position = UDim2.new(0.5, -210, 1, 20),
+		BackgroundTransparency = 1
+	}):Play()
 	for _, v in card:GetDescendants() do
 		if v:IsA('TextLabel') then
-			TweenService:Create(v, TweenInfo.new(0.5), {TextTransparency = 1}):Play()
+			TweenService:Create(v, TweenInfo.new(0.4), {TextTransparency = 1}):Play()
 		elseif v:IsA('Frame') then
-			TweenService:Create(v, TweenInfo.new(0.5), {BackgroundTransparency = 1}):Play()
+			TweenService:Create(v, TweenInfo.new(0.4), {BackgroundTransparency = 1}):Play()
+		elseif v:IsA('UIStroke') then
+			TweenService:Create(v, TweenInfo.new(0.4), {Transparency = 1}):Play()
 		end
 	end
-	TweenService:Create(card, TweenInfo.new(0.5), {BackgroundTransparency = 1}):Play()
-	task.wait(0.7)
+	task.wait(0.6)
 	screenGui:Destroy()
 end
 
@@ -161,7 +177,7 @@ for _, folder in {'newvape', 'newvape/games', 'newvape/profiles', 'newvape/asset
 	end
 end
 
-setProgress(0.05, 'Initializing...')
+setProgress(0.05, 'Initializing your experience...')
 task.wait(1)
 
 if not shared.VapeDeveloper then
@@ -197,7 +213,7 @@ if not shared.VapeDeveloper then
 	writefile('newvape/profiles/commit.txt', commit)
 end
 
-setProgress(0.5, 'Downloading core...')
+setProgress(0.5, 'Downloading core files...')
 task.wait(1.2)
 local mainFile = downloadFile('newvape/main.lua')
 setProgress(0.75, 'Loading modules...')
