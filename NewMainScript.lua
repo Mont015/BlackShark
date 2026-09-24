@@ -11,138 +11,161 @@ local Players = game:GetService('Players')
 local TweenService = game:GetService('TweenService')
 local lplr = Players.LocalPlayer
 
-local screenGui = Instance.new('ScreenGui')
-screenGui.Name = 'BlackSharkLoader'
-screenGui.ResetOnSpawn = false
-screenGui.DisplayOrder = 9999
-screenGui.IgnoreGuiInset = true
-screenGui.Parent = lplr:WaitForChild('PlayerGui')
+local ScreenGui = Instance.new('ScreenGui', lplr:WaitForChild('PlayerGui'))
+ScreenGui.DisplayOrder = 9999
+ScreenGui.IgnoreGuiInset = true
+ScreenGui.ResetOnSpawn = false
 
-local card = Instance.new('Frame')
-card.Size = UDim2.fromOffset(420, 210)
-card.Position = UDim2.new(0.5, -210, 0.5, -105)
-card.BackgroundColor3 = Color3.fromRGB(18, 18, 22)
-card.BorderSizePixel = 0
-card.ZIndex = 11
-card.Parent = screenGui
-Instance.new('UICorner', card).CornerRadius = UDim.new(0, 8)
+local Frame = Instance.new('Frame', ScreenGui)
+local ImageLabel = Instance.new('ImageLabel', Frame)
+local UIGradient = Instance.new('UIGradient', ImageLabel)
+local UICorner1 = Instance.new('UICorner', Frame)
+local TopBorder = Instance.new('Frame', Frame)
+local TopBorderInner = Instance.new('Frame', Frame)
+local BottomBorder = Instance.new('Frame', Frame)
+local BottomBorderInner = Instance.new('Frame', Frame)
+local LoadingTextFrame = Instance.new('Frame', Frame)
+local LoadingLabel = Instance.new('TextLabel', LoadingTextFrame)
+local BarBg = Instance.new('Frame', Frame)
+local UICorner2 = Instance.new('UICorner', BarBg)
+local BarFill = Instance.new('Frame', BarBg)
+local UICorner3 = Instance.new('UICorner', BarFill)
+local StatusLabel = Instance.new('TextLabel', Frame)
+local Dot1 = Instance.new('Frame', Frame)
+local UICorner4 = Instance.new('UICorner', Dot1)
+local Dot2 = Instance.new('Frame', Frame)
+local UICorner5 = Instance.new('UICorner', Dot2)
+local Dot3 = Instance.new('Frame', Frame)
+local UICorner6 = Instance.new('UICorner', Dot3)
+local Dot4 = Instance.new('Frame', Frame)
+local UICorner7 = Instance.new('UICorner', Dot4)
 
-local border = Instance.new('UIStroke')
-border.Color = Color3.fromRGB(0, 200, 160)
-border.Thickness = 1.5
-border.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
-border.Parent = card
+local teal = Color3.new(0.0314, 0.7961, 0.6392)
+local white = Color3.new(1, 1, 1)
+local black = Color3.new(0, 0, 0)
+local gray = Color3.new(0.3098, 0.3098, 0.3098)
 
-local logo = Instance.new('TextLabel')
-logo.Size = UDim2.fromOffset(380, 50)
-logo.Position = UDim2.fromOffset(20, 30)
-logo.BackgroundTransparency = 1
-logo.Text = 'BlackShark'
-logo.TextColor3 = Color3.fromRGB(255, 255, 255)
-logo.Font = Enum.Font.GothamBold
-logo.TextSize = 32
-logo.ZIndex = 12
-logo.Parent = card
+ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 
-local loadingText = Instance.new('TextLabel')
-loadingText.Size = UDim2.fromOffset(380, 24)
-loadingText.Position = UDim2.fromOffset(20, 88)
-loadingText.BackgroundTransparency = 1
-loadingText.Text = 'L O A D I N G . . .'
-loadingText.TextColor3 = Color3.fromRGB(200, 200, 200)
-loadingText.Font = Enum.Font.GothamBold
-loadingText.TextSize = 13
-loadingText.LetterSpacing = 2
-loadingText.ZIndex = 12
-loadingText.Parent = card
+Frame.Position = UDim2.new(0.3437, 0, 0.3817, 0)
+Frame.Size = UDim2.new(0, 417, 0, 199)
+Frame.BackgroundColor3 = black
+Frame.BorderSizePixel = 0
 
-local barBg = Instance.new('Frame')
-barBg.Size = UDim2.fromOffset(380, 6)
-barBg.Position = UDim2.fromOffset(20, 118)
-barBg.BackgroundColor3 = Color3.fromRGB(40, 40, 50)
-barBg.BorderSizePixel = 0
-barBg.ZIndex = 12
-barBg.Parent = card
-Instance.new('UICorner', barBg).CornerRadius = UDim.new(1, 0)
+ImageLabel.Position = UDim2.new(0.2896, 0, 0.1454, 0)
+ImageLabel.Size = UDim2.new(0, 180, 0, 32)
+ImageLabel.BackgroundTransparency = 1
+ImageLabel.BorderSizePixel = 0
+ImageLabel.Image = 'rbxassetid://111167176116900'
 
-local barFill = Instance.new('Frame')
-barFill.Size = UDim2.new(0, 0, 1, 0)
-barFill.BackgroundColor3 = Color3.fromRGB(0, 200, 160)
-barFill.BorderSizePixel = 0
-barFill.ZIndex = 13
-barFill.Parent = barBg
-Instance.new('UICorner', barFill).CornerRadius = UDim.new(1, 0)
+UIGradient.Color = ColorSequence.new({
+	ColorSequenceKeypoint.new(0, white),
+	ColorSequenceKeypoint.new(0.9948097467422485, Color3.new(0.0313725508749485, 0.7960784435272217, 0.6392157077789307)),
+	ColorSequenceKeypoint.new(1, white)
+})
 
-local statusLabel = Instance.new('TextLabel')
-statusLabel.Size = UDim2.fromOffset(380, 20)
-statusLabel.Position = UDim2.fromOffset(20, 132)
-statusLabel.BackgroundTransparency = 1
-statusLabel.Text = 'Initializing your experience...'
-statusLabel.TextColor3 = Color3.fromRGB(120, 120, 140)
-statusLabel.Font = Enum.Font.Gotham
-statusLabel.TextSize = 12
-statusLabel.ZIndex = 12
-statusLabel.Parent = card
+TopBorder.Size = UDim2.new(0, 417, 0, 6)
+TopBorder.BackgroundColor3 = teal
+TopBorder.BorderSizePixel = 0
 
-local dotsFrame = Instance.new('Frame')
-dotsFrame.Size = UDim2.fromOffset(380, 20)
-dotsFrame.Position = UDim2.fromOffset(20, 162)
-dotsFrame.BackgroundTransparency = 1
-dotsFrame.ZIndex = 12
-dotsFrame.Parent = card
+TopBorderInner.Position = UDim2.new(0, 0, 0.6667, 0)
+TopBorderInner.Size = UDim2.new(0, 417, 0, 2)
+TopBorderInner.BackgroundColor3 = teal
+TopBorderInner.BorderSizePixel = 0
 
-local dots = {}
-for i = 1, 4 do
-	local dot = Instance.new('Frame')
-	dot.Size = UDim2.fromOffset(10, 10)
-	dot.Position = UDim2.fromOffset((i - 1) * 18, 5)
-	dot.BackgroundColor3 = Color3.fromRGB(50, 50, 60)
-	dot.BorderSizePixel = 0
-	dot.ZIndex = 13
-	dot.Parent = dotsFrame
-	Instance.new('UICorner', dot).CornerRadius = UDim.new(1, 0)
-	dots[i] = dot
-end
+BottomBorder.Position = UDim2.new(0, 0, 0.9718, 0)
+BottomBorder.Size = UDim2.new(0, 417, 0, 6)
+BottomBorder.BackgroundColor3 = teal
+BottomBorder.BorderSizePixel = 0
 
-local activeDot = 1
-local dotConn = game:GetService('RunService').Heartbeat:Connect(function()
-	local t = tick() % 0.5
-	if t < 0.1 then
-		local newDot = math.floor(tick() / 0.5) % 4 + 1
-		if newDot ~= activeDot then
-			dots[activeDot].BackgroundColor3 = Color3.fromRGB(50, 50, 60)
-			activeDot = newDot
-			dots[activeDot].BackgroundColor3 = Color3.fromRGB(0, 200, 160)
-		end
-	end
-end)
+BottomBorderInner.Size = UDim2.new(0, 417, 0, 2)
+BottomBorderInner.BackgroundColor3 = teal
+BottomBorderInner.BorderSizePixel = 0
+
+LoadingTextFrame.Position = UDim2.new(0.3692, 0, 0.4038, 0)
+LoadingTextFrame.Size = UDim2.new(0, 112, 0, 26)
+LoadingTextFrame.BackgroundTransparency = 1
+LoadingTextFrame.BorderSizePixel = 0
+
+LoadingLabel.Size = UDim2.new(1, 0, 1, 0)
+LoadingLabel.BackgroundTransparency = 1
+LoadingLabel.BorderSizePixel = 0
+LoadingLabel.Text = ' L O A D I N G . . .'
+LoadingLabel.TextColor3 = gray
+LoadingLabel.Font = Enum.Font.Nunito
+LoadingLabel.TextSize = 17
+
+BarBg.Position = UDim2.new(0.0979, 0, 0.5687, 0)
+BarBg.Size = UDim2.new(0, 334, 0, 10)
+BarBg.BackgroundColor3 = white
+BarBg.BorderSizePixel = 0
+BarBg.ZIndex = 2
+UICorner2.CornerRadius = UDim.new(1, 0)
+
+BarFill.Size = UDim2.new(0, 0, 1, 0)
+BarFill.BackgroundColor3 = Color3.new(0.1882, 1, 0.9451)
+BarFill.BorderSizePixel = 0
+BarFill.ZIndex = 3
+UICorner3.CornerRadius = UDim.new(1, 0)
+
+StatusLabel.Position = UDim2.new(0.2874, 0, 0.6573, 0)
+StatusLabel.Size = UDim2.new(0, 180, 0, 27)
+StatusLabel.BackgroundTransparency = 1
+StatusLabel.BorderSizePixel = 0
+StatusLabel.Text = 'Initializing your experience...'
+StatusLabel.TextColor3 = gray
+StatusLabel.Font = Enum.Font.Nunito
+StatusLabel.TextSize = 18
+
+local dotColor = teal
+local dotInactive = white
+
+Dot1.Position = UDim2.new(0.4158, 0, 0.8216, 0)
+Dot1.Size = UDim2.new(0, 12, 0, 12)
+Dot1.BackgroundColor3 = dotColor
+Dot1.BorderSizePixel = 0
+UICorner4.CornerRadius = UDim.new(1, 0)
+
+Dot2.Position = UDim2.new(0.4625, 0, 0.8216, 0)
+Dot2.Size = UDim2.new(0, 12, 0, 12)
+Dot2.BackgroundColor3 = dotInactive
+Dot2.BorderSizePixel = 0
+UICorner5.CornerRadius = UDim.new(1, 0)
+
+Dot3.Position = UDim2.new(0.5092, 0, 0.8216, 0)
+Dot3.Size = UDim2.new(0, 12, 0, 12)
+Dot3.BackgroundColor3 = dotInactive
+Dot3.BorderSizePixel = 0
+UICorner6.CornerRadius = UDim.new(1, 0)
+
+Dot4.Position = UDim2.new(0.5559, 0, 0.8216, 0)
+Dot4.Size = UDim2.new(0, 12, 0, 12)
+Dot4.BackgroundColor3 = dotInactive
+Dot4.BorderSizePixel = 0
+UICorner7.CornerRadius = UDim.new(1, 0)
+
+local dots = {Dot1, Dot2, Dot3, Dot4}
 
 local function setProgress(pct, status)
-	TweenService:Create(barFill, TweenInfo.new(0.4, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
+	TweenService:Create(BarFill, TweenInfo.new(0.4, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
 		Size = UDim2.new(pct, 0, 1, 0)
 	}):Play()
-	if status then statusLabel.Text = status end
+	if status then StatusLabel.Text = status end
+	local activeDots = math.floor(pct * 4)
+	for i, dot in dots do
+		dot.BackgroundColor3 = i <= activeDots and teal or dotInactive
+	end
 end
 
 local function closeLoader()
 	setProgress(1, 'Ready!')
+	for _, dot in dots do dot.BackgroundColor3 = teal end
 	task.wait(0.5)
-	dotConn:Disconnect()
-	TweenService:Create(card, TweenInfo.new(0.5, Enum.EasingStyle.Quad, Enum.EasingDirection.In), {
-		Position = UDim2.new(0.5, -210, 1, 20),
-		BackgroundTransparency = 1
+	TweenService:Create(Frame, TweenInfo.new(0.5, Enum.EasingStyle.Quad, Enum.EasingDirection.In), {
+		Position = UDim2.new(0.3437, 0, 1.2, 0)
 	}):Play()
-	for _, v in card:GetDescendants() do
-		if v:IsA('TextLabel') then
-			TweenService:Create(v, TweenInfo.new(0.4), {TextTransparency = 1}):Play()
-		elseif v:IsA('Frame') then
-			TweenService:Create(v, TweenInfo.new(0.4), {BackgroundTransparency = 1}):Play()
-		elseif v:IsA('UIStroke') then
-			TweenService:Create(v, TweenInfo.new(0.4), {Transparency = 1}):Play()
-		end
-	end
 	task.wait(0.6)
-	screenGui:Destroy()
+	ScreenGui:Destroy()
 end
 
 local function downloadFile(path, func)
