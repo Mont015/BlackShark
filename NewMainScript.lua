@@ -64,22 +64,26 @@ UIGradient.Color = ColorSequence.new({
 	ColorSequenceKeypoint.new(1, white)
 })
 
-TopBorder.Size = UDim2.new(0, 417, 0, 6)
+TopBorder.Position = UDim2.new(0, 0, 0, 0)
+TopBorder.Size = UDim2.new(1, 0, 0, 4)
 TopBorder.BackgroundColor3 = teal
 TopBorder.BorderSizePixel = 0
 
-TopBorderInner.Position = UDim2.new(0, 0, 0.6667, 0)
-TopBorderInner.Size = UDim2.new(0, 417, 0, 2)
+TopBorderInner.Position = UDim2.new(0, 0, 0, 4)
+TopBorderInner.Size = UDim2.new(1, 0, 0, 1)
 TopBorderInner.BackgroundColor3 = teal
+TopBorderInner.BackgroundTransparency = 0.5
 TopBorderInner.BorderSizePixel = 0
 
-BottomBorder.Position = UDim2.new(0, 0, 0.9718, 0)
-BottomBorder.Size = UDim2.new(0, 417, 0, 6)
+BottomBorder.Position = UDim2.new(0, 0, 1, -4)
+BottomBorder.Size = UDim2.new(1, 0, 0, 4)
 BottomBorder.BackgroundColor3 = teal
 BottomBorder.BorderSizePixel = 0
 
-BottomBorderInner.Size = UDim2.new(0, 417, 0, 2)
+BottomBorderInner.Position = UDim2.new(0, 0, 1, -5)
+BottomBorderInner.Size = UDim2.new(1, 0, 0, 1)
 BottomBorderInner.BackgroundColor3 = teal
+BottomBorderInner.BackgroundTransparency = 0.5
 BottomBorderInner.BorderSizePixel = 0
 
 LoadingTextFrame.Position = UDim2.new(0.3692, 0, 0.4038, 0)
@@ -97,7 +101,7 @@ LoadingLabel.TextSize = 17
 
 BarBg.Position = UDim2.new(0.0979, 0, 0.5687, 0)
 BarBg.Size = UDim2.new(0, 334, 0, 10)
-BarBg.BackgroundColor3 = white
+BarBg.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
 BarBg.BorderSizePixel = 0
 BarBg.ZIndex = 2
 UICorner2.CornerRadius = UDim.new(1, 0)
