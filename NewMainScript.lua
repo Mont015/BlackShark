@@ -69,22 +69,16 @@ TopBorder.Size = UDim2.new(1, 0, 0, 4)
 TopBorder.BackgroundColor3 = teal
 TopBorder.BorderSizePixel = 0
 
-TopBorderInner.Position = UDim2.new(0, 0, 0, 4)
-TopBorderInner.Size = UDim2.new(1, 0, 0, 1)
-TopBorderInner.BackgroundColor3 = teal
-TopBorderInner.BackgroundTransparency = 0.5
-TopBorderInner.BorderSizePixel = 0
+TopBorderInner.BackgroundTransparency = 1
+TopBorderInner.Size = UDim2.new(0, 0, 0, 0)
 
 BottomBorder.Position = UDim2.new(0, 0, 1, -4)
 BottomBorder.Size = UDim2.new(1, 0, 0, 4)
 BottomBorder.BackgroundColor3 = teal
 BottomBorder.BorderSizePixel = 0
 
-BottomBorderInner.Position = UDim2.new(0, 0, 1, -5)
-BottomBorderInner.Size = UDim2.new(1, 0, 0, 1)
-BottomBorderInner.BackgroundColor3 = teal
-BottomBorderInner.BackgroundTransparency = 0.5
-BottomBorderInner.BorderSizePixel = 0
+BottomBorderInner.BackgroundTransparency = 1
+BottomBorderInner.Size = UDim2.new(0, 0, 0, 0)
 
 LoadingTextFrame.Position = UDim2.new(0.3692, 0, 0.4038, 0)
 LoadingTextFrame.Size = UDim2.new(0, 112, 0, 26)
