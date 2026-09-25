@@ -47,7 +47,8 @@ local gray = Color3.new(0.3098, 0.3098, 0.3098)
 
 ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 
-Frame.Position = UDim2.new(0.3437, 0, 0.3817, 0)
+Frame.AnchorPoint = Vector2.new(0.5, 0.5)
+Frame.Position = UDim2.new(0.5, 0, 0.5, 0)
 Frame.Size = UDim2.new(0, 417, 0, 199)
 Frame.BackgroundColor3 = black
 Frame.BorderSizePixel = 0
@@ -160,7 +161,7 @@ local function closeLoader()
 	for _, dot in dots do dot.BackgroundColor3 = teal end
 	task.wait(0.5)
 	TweenService:Create(Frame, TweenInfo.new(0.5, Enum.EasingStyle.Quad, Enum.EasingDirection.In), {
-		Position = UDim2.new(0.3437, 0, 1.2, 0)
+		Position = UDim2.new(0.5, 0, 1.2, 0)
 	}):Play()
 	task.wait(0.6)
 	ScreenGui:Destroy()
