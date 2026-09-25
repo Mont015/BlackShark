@@ -18,6 +18,7 @@ ScreenGui.ResetOnSpawn = false
 
 local Frame = Instance.new('Frame', ScreenGui)
 local ImageLabel = Instance.new('ImageLabel', Frame)
+local ImageGlow = Instance.new('ImageLabel', Frame)
 local UIGradient = Instance.new('UIGradient', ImageLabel)
 local UICorner1 = Instance.new('UICorner', Frame)
 local TopBorder = Instance.new('Frame', Frame)
@@ -45,6 +46,14 @@ local white = Color3.new(1, 1, 1)
 local black = Color3.new(0, 0, 0)
 local gray = Color3.new(0.3098, 0.3098, 0.3098)
 
+local function addGlow(object, transparency)
+	local stroke = Instance.new('UIStroke', object)
+	stroke.Color = teal
+	stroke.Thickness = 1
+	stroke.Transparency = transparency
+	return stroke
+end
+
 ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 
 Frame.Position = UDim2.new(0.3437, 0, 0.3817, 0)
@@ -58,6 +67,15 @@ ImageLabel.BackgroundTransparency = 1
 ImageLabel.BorderSizePixel = 0
 ImageLabel.Image = 'rbxassetid://111167176116900'
 
+ImageGlow.Position = UDim2.new(0.2896, -5, 0.1454, -5)
+ImageGlow.Size = UDim2.new(0, 190, 0, 42)
+ImageGlow.BackgroundTransparency = 1
+ImageGlow.BorderSizePixel = 0
+ImageGlow.Image = ImageLabel.Image
+ImageGlow.ImageColor3 = teal
+ImageGlow.ImageTransparency = 0.82
+ImageGlow.ZIndex = 0
+
 UIGradient.Color = ColorSequence.new({
 	ColorSequenceKeypoint.new(0, white),
 	ColorSequenceKeypoint.new(0.9948097467422485, Color3.new(0.0313725508749485, 0.7960784435272217, 0.6392157077789307)),
@@ -68,6 +86,7 @@ TopBorder.Position = UDim2.new(0, 0, 0, 0)
 TopBorder.Size = UDim2.new(1, 0, 0, 4)
 TopBorder.BackgroundColor3 = teal
 TopBorder.BorderSizePixel = 0
+addGlow(TopBorder, 0.68)
 
 TopBorderInner.BackgroundTransparency = 1
 TopBorderInner.Size = UDim2.new(0, 0, 0, 0)
@@ -76,6 +95,7 @@ BottomBorder.Position = UDim2.new(0, 0, 1, -4)
 BottomBorder.Size = UDim2.new(1, 0, 0, 4)
 BottomBorder.BackgroundColor3 = teal
 BottomBorder.BorderSizePixel = 0
+addGlow(BottomBorder, 0.68)
 
 BottomBorderInner.BackgroundTransparency = 1
 BottomBorderInner.Size = UDim2.new(0, 0, 0, 0)
@@ -105,6 +125,7 @@ BarFill.BackgroundColor3 = Color3.new(0.1882, 1, 0.9451)
 BarFill.BorderSizePixel = 0
 BarFill.ZIndex = 3
 UICorner3.CornerRadius = UDim.new(1, 0)
+addGlow(BarFill, 0.62)
 
 StatusLabel.Position = UDim2.new(0.2874, 0, 0.6573, 0)
 StatusLabel.Size = UDim2.new(0, 180, 0, 27)
@@ -123,26 +144,31 @@ Dot1.Size = UDim2.new(0, 12, 0, 12)
 Dot1.BackgroundColor3 = dotColor
 Dot1.BorderSizePixel = 0
 UICorner4.CornerRadius = UDim.new(1, 0)
+local Dot1Glow = addGlow(Dot1, 0.7)
 
 Dot2.Position = UDim2.new(0.4625, 0, 0.8216, 0)
 Dot2.Size = UDim2.new(0, 12, 0, 12)
 Dot2.BackgroundColor3 = dotInactive
 Dot2.BorderSizePixel = 0
 UICorner5.CornerRadius = UDim.new(1, 0)
+local Dot2Glow = addGlow(Dot2, 1)
 
 Dot3.Position = UDim2.new(0.5092, 0, 0.8216, 0)
 Dot3.Size = UDim2.new(0, 12, 0, 12)
 Dot3.BackgroundColor3 = dotInactive
 Dot3.BorderSizePixel = 0
 UICorner6.CornerRadius = UDim.new(1, 0)
+local Dot3Glow = addGlow(Dot3, 1)
 
 Dot4.Position = UDim2.new(0.5559, 0, 0.8216, 0)
 Dot4.Size = UDim2.new(0, 12, 0, 12)
 Dot4.BackgroundColor3 = dotInactive
 Dot4.BorderSizePixel = 0
 UICorner7.CornerRadius = UDim.new(1, 0)
+local Dot4Glow = addGlow(Dot4, 1)
 
 local dots = {Dot1, Dot2, Dot3, Dot4}
+local dotGlows = {Dot1Glow, Dot2Glow, Dot3Glow, Dot4Glow}
 
 local function setProgress(pct, status)
 	TweenService:Create(BarFill, TweenInfo.new(0.4, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
@@ -151,13 +177,18 @@ local function setProgress(pct, status)
 	if status then StatusLabel.Text = status end
 	local activeDots = math.floor(pct * 4)
 	for i, dot in dots do
-		dot.BackgroundColor3 = i <= activeDots and teal or dotInactive
+		local active = i <= activeDots
+		dot.BackgroundColor3 = active and teal or dotInactive
+		dotGlows[i].Transparency = active and 0.7 or 1
 	end
 end
 
 local function closeLoader()
 	setProgress(1, 'Ready!')
-	for _, dot in dots do dot.BackgroundColor3 = teal end
+	for i, dot in dots do
+		dot.BackgroundColor3 = teal
+		dotGlows[i].Transparency = 0.7
+	end
 	task.wait(0.5)
 	TweenService:Create(Frame, TweenInfo.new(0.5, Enum.EasingStyle.Quad, Enum.EasingDirection.In), {
 		Position = UDim2.new(0.3437, 0, 1.2, 0)
