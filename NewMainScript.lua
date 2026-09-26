@@ -216,20 +216,16 @@ if not shared.VapeDeveloper then
 	setProgress(0.28, 'Verifying cache...')
 	task.wait(0.8)
 
-	-- If GitHub's API check fails, cached game code may be older than the
-	-- current release. Refresh it instead of silently loading stale modules.
-	local hasUpdate = commit == 'main' or (isfile('newvape/profiles/commit.txt') and readfile('newvape/profiles/commit.txt') or '') ~= commit
+	-- Only clear cache after a confirmed commit change. Network/API failures
+	-- must not trigger a full cache scan, since some executors can stall there.
+	local hasUpdate = commit ~= 'main' and (isfile('newvape/profiles/commit.txt') and readfile('newvape/profiles/commit.txt') or '') ~= commit
 
 	if hasUpdate then
-		setProgress(0.38, commit == 'main' and 'Refreshing cached files...' or 'Clearing outdated files...')
+		setProgress(0.38, 'Updating active game files...')
 		task.wait(0.6)
-		wipeFolder('newvape/games')
-		wipeFolder('newvape/guis')
-		wipeFolder('newvape/libraries')
-		delfile('newvape/main.lua')
-		if commit ~= 'main' then
-			writefile('newvape/profiles/commit.txt', commit)
-		end
+		pcall(delfile, 'newvape/main.lua')
+		pcall(delfile, 'newvape/games/'..game.PlaceId..'.lua')
+		writefile('newvape/profiles/commit.txt', commit)
 	end
 
 	if (isfile('newvape/profiles/asset.txt') and readfile('newvape/profiles/asset.txt') or '') ~= assetVer then
