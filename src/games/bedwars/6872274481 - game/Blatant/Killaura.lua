@@ -41,15 +41,10 @@ run(function()
 	end
 
 	local function getAttackRemote()
-		if AttackRemote then
-			return AttackRemote
-		end
-
 		local success, remote = pcall(function()
 			return bedwars.Client:Get(remotes.AttackEntity)
 		end)
-		AttackRemote = success and remote or nil
-		return AttackRemote
+		return success and remote or nil
 	end
 
 	local function sendAttack(attackTable)
@@ -67,9 +62,6 @@ run(function()
 				error('Attack remote is unavailable')
 			end
 		end)
-		if not success then
-			AttackRemote = nil
-		end
 		return success
 	end
 
