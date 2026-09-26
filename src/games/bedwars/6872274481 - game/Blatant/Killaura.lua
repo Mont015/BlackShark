@@ -41,10 +41,15 @@ run(function()
 	end
 
 	local function getAttackRemote()
+		if AttackRemote then
+			return AttackRemote
+		end
+
 		local success, remote = pcall(function()
 			return bedwars.Client:Get(remotes.AttackEntity)
 		end)
-		return success and remote or nil
+		AttackRemote = success and remote or nil
+		return AttackRemote
 	end
 
 	local function sendAttack(attackTable)
@@ -62,6 +67,9 @@ run(function()
 				error('Attack remote is unavailable')
 			end
 		end)
+		if not success then
+			AttackRemote = nil
+		end
 		return success
 	end
 
@@ -244,6 +252,8 @@ run(function()
 			AnimationToken += 1
 			local animationToken = AnimationToken
 			if callback then
+				-- Refresh once per enable, then keep the combat loop fast.
+				AttackRemote = nil
 				Killaura:Clean(inputService.InputBegan:Connect(function(input)
 					if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
 						LastManualSwing = tick()
