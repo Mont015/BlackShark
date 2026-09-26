@@ -43,22 +43,29 @@ local function chooseDirection(root, sourcePosition)
 	end
 
 	local away = flat.Unit
-	if Mode.Value == 'Retreat' or Mode.Value == 'Hop' then
-		return (not VoidCheck.Enabled or hasGround(root, away)) and away or nil
-	end
-
 	local left = Vector3.new(-away.Z, 0, away.X)
 	local right = -left
+	local behind = -away
 	strafeSide = -strafeSide
 	local preferred = strafeSide == 1 and left or right
 	local alternate = strafeSide == 1 and right or left
-	if not VoidCheck.Enabled or hasGround(root, preferred) then
-		return preferred
+	local directions
+	if Mode.Value == 'Behind' then
+		directions = {behind, preferred, alternate, away}
+	elseif Mode.Value == 'Auto' and flat.Magnitude <= 12 then
+		directions = {behind, preferred, alternate, away}
+	elseif Mode.Value == 'Retreat' then
+		directions = {away, preferred, alternate}
+	else
+		directions = {preferred, alternate, behind, away}
 	end
-	if hasGround(root, alternate) then
-		return alternate
+
+	for _, direction in directions do
+		if not VoidCheck.Enabled or hasGround(root, direction) then
+			return direction
+		end
 	end
-	return hasGround(root, away) and away or nil
+	return nil
 end
 
 local function handleDamage(damageTable)
@@ -97,7 +104,7 @@ AntiHit = vape.Categories.Blatant:CreateModule({
 				if not root or not root.Parent or not isnetworkowner(root) or not dodgeDirection then return end
 
 				local vertical = root.AssemblyLinearVelocity.Y
-				if Mode.Value == 'Hop' then
+				if Mode.Value == 'Hop' or Mode.Value == 'Up' then
 					vertical = math.max(vertical, HopHeight.Value)
 				end
 				local speed = math.max(ResponseSpeed.Value, getSpeed())
@@ -114,8 +121,9 @@ AntiHit = vape.Categories.Blatant:CreateModule({
 
 Mode = AntiHit:CreateDropdown({
 	Name = 'Mode',
-	List = {'Strafe', 'Retreat', 'Hop'},
-	Default = 'Strafe'
+	List = {'Auto', 'Side', 'Behind', 'Up', 'Retreat', 'Hop'},
+	Default = 'Auto',
+	Tooltip = 'Auto - Goes behind close attackers, otherwise dodges sideways\nSide - Dodges left or right\nBehind - Moves through the attacker\nUp - Side dodge with a short upward escape'
 })
 TriggerRange = AntiHit:CreateSlider({
 	Name = 'Trigger range',
