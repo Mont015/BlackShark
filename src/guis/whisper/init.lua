@@ -347,7 +347,7 @@ vape.Blur = guipane:CreateToggle({
 	Function = function()
 		vape:BlurCheck()
 	end,
-	Default = true,
+	Default = false,
 	Tooltip = 'Blur the background of the GUI'
 })
 

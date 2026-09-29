@@ -5,15 +5,21 @@ local component = {
 
 local window = Instance.new('TextButton')
 window.AutoButtonColor = false
-window.BackgroundColor3 = color.Dark(uipallet.Main, 0.02)
+window.AnchorPoint = Vector2.new(0.5, 0.5)
+window.BackgroundColor3 = Color3.fromRGB(17, 14, 24)
 window.Name = 'GUICategory'
-window.Position = UDim2.fromOffset(6, 60)
+window.Position = UDim2.new(0.5, 0, 0.5, 0)
+window.Size = UDim2.fromOffset(820, 500)
 window.Text = ''
 window.Parent = clickgui
 component.Object = window
-addBlur(window)
 addCorner(window)
-addDragHandler(window)
+local sidebar = Instance.new('Frame')
+sidebar.BackgroundColor3 = Color3.fromRGB(23, 18, 33)
+sidebar.BorderSizePixel = 0
+sidebar.Name = 'Sidebar'
+sidebar.Size = UDim2.fromOffset(238, 500)
+sidebar.Parent = window
 local logo = Instance.new('ImageLabel')
 logo.BackgroundTransparency = 1
 logo.Image = getvapeasset('newvape/assets/new/vapelogomini.png')
@@ -44,8 +50,8 @@ wordmark.TextXAlignment = Enum.TextXAlignment.Left
 wordmark.Parent = window
 local children = Instance.new('Frame')
 children.BackgroundTransparency = 1
-children.Position = UDim2.fromOffset(0, 37)
-children.Size = UDim2.new(1, 0, 1, -33)
+children.Position = UDim2.fromOffset(9, 62)
+children.Size = UDim2.fromOffset(220, 424)
 children.Parent = window
 local windowlist = Instance.new('UIListLayout')
 windowlist.HorizontalAlignment = Enum.HorizontalAlignment.Center
@@ -53,7 +59,7 @@ windowlist.SortOrder = Enum.SortOrder.LayoutOrder
 windowlist.Parent = children
 local settingsbutton = Instance.new('TextButton')
 settingsbutton.BackgroundTransparency = 1
-settingsbutton.Position = UDim2.new(1, -40, 0, 0)
+settingsbutton.Position = UDim2.fromOffset(192, 10)
 settingsbutton.Size = UDim2.fromOffset(40, 40)
 settingsbutton.Text = ''
 settingsbutton.Parent = window
@@ -68,7 +74,7 @@ settingsicon.Parent = settingsbutton
 local discord = Instance.new('ImageButton')
 discord.BackgroundTransparency = 1
 discord.Image = getvapeasset('newvape/assets/new/discord.png')
-discord.Position = UDim2.new(1, -56, 0, 11)
+discord.Position = UDim2.fromOffset(168, 21)
 discord.Size = UDim2.fromOffset(16, 16)
 discord.Parent = window
 addTooltip(discord, 'Join discord')
@@ -105,9 +111,7 @@ function component:Load(data)
 		end
 	end
 
-	if data.Position then
-		window.Position = UDim2.fromOffset(data.Position.X, data.Position.Y)
-	end
+window.Position = UDim2.new(0.5, 0, 0.5, 0)
 end
 
 function component:Save(data)
@@ -181,7 +185,7 @@ windowlist:GetPropertyChangedSignal('AbsoluteContentSize'):Connect(function()
 		setthreadidentity(8)
 	end
 
-	window.Size = UDim2.fromOffset(220, 42 + windowlist.AbsoluteContentSize.Y / scale.Scale)
+window.Size = UDim2.fromOffset(820, 500)
 	for _, button in component.Buttons do
 		if button.Icon then
 			button.Object.Text = string.rep(' ', 39 * scale.Scale)..button.Name

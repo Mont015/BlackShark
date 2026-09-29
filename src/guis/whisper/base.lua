@@ -320,7 +320,7 @@ end
 function vape:BlurCheck()
 	if self.ThreadFix then
 		setthreadidentity(8)
-		runService:SetRobloxGuiFocused((clickgui.Visible or guiService:GetErrorType() ~= Enum.ConnectionError.OK) and self.Blur.Enabled)
+		runService:SetRobloxGuiFocused(false)
 	end
 end
 
@@ -444,7 +444,7 @@ function vape:Load(skipgui, profile)
 		guiData = loadJson('newvape/profiles/'..game.GameId..'.gui.txt')
 		if not guiData then
 			guiData = {Categories = {}}
-			self:CreateNotification('Vape', 'Failed to load GUI settings.', 10, 'alert')
+			self:CreateNotification('Whisper', 'Failed to load GUI settings.', 10, 'alert')
 			canSave = false
 		end
 
@@ -476,7 +476,7 @@ function vape:Load(skipgui, profile)
 		local mainData = loadJson('newvape/profiles/'..self.Profile..self.Place..'.txt')
 		if not mainData then
 			mainData = {Categories = {}, Modules = {}, Legit = {}}
-			self:CreateNotification('Vape', 'Failed to load '..self.Profile..' profile.', 10, 'alert')
+			self:CreateNotification('Whisper', 'Failed to load '..self.Profile..' profile.', 10, 'alert')
 			canSave = false
 		end
 

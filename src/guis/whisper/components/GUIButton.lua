@@ -61,7 +61,16 @@ end
 
 function component:Toggle()
 	if props.Window then
-		self.Enabled = not self.Enabled
+		for _, category in vape.Categories do
+			if category.Type == 'Category' and category.Object ~= props.Window then
+				category.Object.Visible = false
+				if category.Button then
+					category.Button.Enabled = false
+					category.Button.Object.TextColor3 = color.Dark(uipallet.Text, 0.16)
+				end
+			end
+		end
+		self.Enabled = true
 		tween:Tween(arrow, uipallet.Tween, {
 			Position = UDim2.new(1, self.Enabled and -14 or -20, 0, 16)
 		})
@@ -72,7 +81,7 @@ function component:Toggle()
 		end
 
 		button.BackgroundColor3 = color.Light(uipallet.Main, 0.02)
-		props.Window.Visible = self.Enabled
+		props.Window.Visible = true
 	else
 		props.Function()
 	end
