@@ -197,6 +197,9 @@ vape:Clean(targets.Update)
 
 components.LegitWindow()
 vape.SearchBar = components.SearchBar()
+vape.SearchBar.Object.AnchorPoint = Vector2.new(0, 0)
+vape.SearchBar.Object.Parent = vape.Categories.Main.Object
+vape.SearchBar.Object.Position = UDim2.fromOffset(9, 62)
 vape.Categories.Main:CreateOverlayBar()
 
 --[[
