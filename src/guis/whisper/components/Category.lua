@@ -107,6 +107,7 @@ stroke.Transparency = 0.8
 stroke.Parent = window
 local windowlist = Instance.new('UIListLayout')
 windowlist.HorizontalAlignment = Enum.HorizontalAlignment.Center
+windowlist.Padding = UDim.new(0, 5)
 windowlist.SortOrder = Enum.SortOrder.LayoutOrder
 windowlist.Parent = children
 

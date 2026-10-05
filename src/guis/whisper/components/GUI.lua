@@ -69,6 +69,7 @@ children.Size = UDim2.fromOffset(220, 374)
 children.Parent = window
 local windowlist = Instance.new('UIListLayout')
 windowlist.HorizontalAlignment = Enum.HorizontalAlignment.Center
+windowlist.Padding = UDim.new(0, 5)
 windowlist.SortOrder = Enum.SortOrder.LayoutOrder
 windowlist.Parent = children
 local settingsbutton = Instance.new('TextButton')
@@ -194,6 +195,11 @@ settingsbutton.MouseLeave:Connect(function()
 end)
 
 settingsbutton.MouseButton1Click:Connect(function()
+	for _, category in vape.Categories do
+		if category.Type == 'Category' then
+			category.Object.Visible = false
+		end
+	end
 	settingspane.Object.Visible = true
 end)
 

@@ -22,6 +22,7 @@ button.TextColor3 = color.Dark(uipallet.Text, 0.16)
 button.TextSize = 14
 button.TextXAlignment = Enum.TextXAlignment.Left
 button.Parent = children
+addCorner(button, UDim.new(0, 6))
 component.Object = button
 addTooltip(button, props.Tooltip)
 local gradient = Instance.new('UIGradient')
@@ -35,6 +36,7 @@ modulechildren.Name = props.Name..'Children'
 modulechildren.Size = UDim2.new(1, 0, 0, 0)
 modulechildren.Visible = false
 modulechildren.Parent = children
+addCorner(modulechildren, UDim.new(0, 6))
 local windowlist = Instance.new('UIListLayout')
 windowlist.HorizontalAlignment = Enum.HorizontalAlignment.Center
 windowlist.SortOrder = Enum.SortOrder.LayoutOrder

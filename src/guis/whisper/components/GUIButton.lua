@@ -10,12 +10,13 @@ button.BackgroundColor3 = uipallet.Main
 button.BorderSizePixel = 0
 button.FontFace = uipallet.Font
 button.Name = props.Name
-button.Size = UDim2.fromOffset(220, 40)
+button.Size = UDim2.fromOffset(220, 38)
 button.Text = (props.Icon and string.rep(' ', 39) or props.Window and string.rep(' ', 17) or string.rep(' ', 10))..props.Name
 button.TextColor3 = color.Dark(uipallet.Text, 0.16)
 button.TextSize = 14
 button.TextXAlignment = Enum.TextXAlignment.Left
 button.Parent = children
+addCorner(button, UDim.new(0, 6))
 component.Object = button
 
 local icon

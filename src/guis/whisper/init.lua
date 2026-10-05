@@ -197,10 +197,10 @@ vape:Clean(targets.Update)
 
 components.LegitWindow()
 vape.SearchBar = components.SearchBar()
--- Keep Search under ClickGui: GUI options access clickgui.Search directly.
--- Its position lines up with the sidebar inside the centered dashboard.
-vape.SearchBar.Object.AnchorPoint = Vector2.new(0.5, 0)
-vape.SearchBar.Object.Position = UDim2.new(0.5, -401, 0.5, -188)
+-- Search belongs to the Whisper sidebar, rather than floating beside it.
+vape.SearchBar.Object.AnchorPoint = Vector2.new(0, 0)
+vape.SearchBar.Object.Position = UDim2.fromOffset(9, 54)
+vape.SearchBar.Object.Parent = vape.Categories.Main.Object
 vape.Categories.Main:CreateOverlayBar()
 
 --[[
@@ -374,10 +374,10 @@ guipane:CreateToggle({
 guipane:CreateToggle({
 	Name = 'Show legit mode',
 	Function = function(enabled)
-		clickgui.Search.Legit.Visible = enabled
-		clickgui.Search.LegitDivider.Visible = enabled
-		clickgui.Search.TextBox.Size = UDim2.new(1, enabled and -50 or -10, 0, 37)
-		clickgui.Search.TextBox.Position = UDim2.fromOffset(enabled and 50 or 10, 0)
+		vape.SearchBar.Object.Legit.Visible = enabled
+		vape.SearchBar.Object.LegitDivider.Visible = enabled
+		vape.SearchBar.Object.TextBox.Size = UDim2.new(1, enabled and -50 or -10, 0, 37)
+		vape.SearchBar.Object.TextBox.Position = UDim2.fromOffset(enabled and 50 or 10, 0)
 	end,
 	Default = true,
 	Tooltip = 'Shows the button to switch to the legit mod menu'
