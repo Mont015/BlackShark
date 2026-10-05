@@ -11,6 +11,7 @@ window.Name = 'GUICategory'
 window.Position = UDim2.new(0.5, 0, 0.5, 0)
 window.Size = UDim2.fromOffset(820, 500)
 window.Text = ''
+	window.ClipsDescendants = true
 window.Parent = clickgui
 component.Object = window
 addCorner(window)
@@ -111,7 +112,10 @@ function component:Load(data)
 		end
 	end
 
-window.Position = UDim2.new(0.5, 0, 0.5, 0)
+	-- Positions saved by the previous floating-window UI use a top-left anchor.
+	-- Whisper is a fixed dashboard, so do not reuse that incompatible position.
+	window.Position = UDim2.new(0.5, 0, 0.5, 0)
+	window.Size = UDim2.fromOffset(820, 500)
 end
 
 function component:Save(data)
