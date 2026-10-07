@@ -55,9 +55,9 @@ do
 		['newvape/assets/new/textgui.png'] = 'rbxassetid://99438663817412',
 		['newvape/assets/new/theme.png'] = 'rbxassetid://111525258317113',
 		['newvape/assets/new/utility.png'] = 'rbxassetid://108303206513893',
-		['newvape/assets/new/vape.png'] = 'rbxassetid://92153855792786',
-		['newvape/assets/new/vapelogo.png'] = 'rbxassetid://126205920310261',
-		['newvape/assets/new/vapelogomini.png'] = 'rbxassetid://109041903452149',
+		['newvape/assets/new/vape.png'] = 'rbxassetid://118368171378409',
+		['newvape/assets/new/vapelogo.png'] = 'rbxassetid://75601759342426',
+		['newvape/assets/new/vapelogomini.png'] = 'rbxassetid://118368171378409',
 		['newvape/assets/new/v4.png'] = 'rbxassetid://102549752760489',
 		['newvape/assets/new/v4mini.png'] = 'rbxassetid://115213099001611',
 		['newvape/assets/new/world.png'] = 'rbxassetid://118917453153459'
